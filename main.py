@@ -81,12 +81,12 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 @app.post('/predict_item')
-def predict_item(item: Item):
+async def predict_item(item: Item):
     predictions = models['lc'].predict(pd.DataFrame([item.model_dump()]))
     return {'prediction':predictions.tolist()[0]}
 
 @app.post('/predict_batch')
-def predict_batch(items: List[Item]):
+async def predict_batch(items: List[Item]):
     predictions = models['lc'].predict(pd.DataFrame(item.model_dump() for item in items))
     return {'predictions':predictions.tolist()}
 
