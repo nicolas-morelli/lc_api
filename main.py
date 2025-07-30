@@ -3,18 +3,12 @@ import time
 from datetime import datetime
 from typing import List
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn
 import joblib
 import numpy as np
 import pandas as pd
-
-
-# Genero un tipo de error propio para errores de validacion
-class ValidationError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
 
 
 # Creo una interfaz para validar datos en predict
@@ -34,21 +28,18 @@ class ModelWrapper:
                 s, e = pos_values
                 if not (((df[col] >= s) & (df[col] <= e)) | df[col].isna()).all() or null_cond:
                     logging.error(f'ValidationError found for col {col}')
-                    raise ValidationError(f'Invalid range for {col}')
+                    raise HTTPException(status_code=400, detail=f'Invalid range for {col}')
 
             if val_type == 'categorical':
                 if not df[col].isin(pos_values).all() or null_cond:
                     logging.error(f'ValidationError found for col {col}')
-                    raise ValidationError(f'Invalid value for {col}')
+                    raise HTTPException(status_code=400, detail=f'Invalid value for {col}')
         return True
 
     def predict(self, df):
-        try:
-            self.validate(df)
-            logging.info('Batch ready for prediction')
-            return self.model.predict(df)
-        except ValidationError as e:
-            raise e
+        self.validate(df)
+        logging.info('Batch ready for prediction')
+        return self.model.predict(df)
 
 
 class Policy(BaseModel):
