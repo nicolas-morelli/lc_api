@@ -2,15 +2,15 @@
 ## Endpoints
 ### /predict_item
 Permite prediccion en Streaming.
-Input: un JSON con la estructura definida por el Pydantic Policy, que contiene las columnas utilizadas en el modelo. 
+- Input: un JSON con la estructura definida por el Pydantic Policy, que contiene las columnas utilizadas en el modelo. 
 Para llevar la fila del DF al JSON, usar .to_dict().
-Output: un JSON con las predicciones, los ms que demoro la prediccion en su totalidad y la fecha de finalizacion de la prediccion.
+- Output: un JSON con las predicciones, los ms que demoro la prediccion en su totalidad y la fecha de finalizacion de la prediccion.
 
 ### /predict_batch
 Permite prediccion de batches.
-Input: una lista de JSONs con la estructura definida por el Pydantic Policy, que contiene las columnas utilizadas en el modelo. 
+- Input: una lista de JSONs con la estructura definida por el Pydantic Policy, que contiene las columnas utilizadas en el modelo. 
 Para llevar el DF a la estructura del JSON, se debe transponer el mismo, usar .to_dict() y generar una lista de todos los valores en el mismo.
-Output: una lista de JSONs con las predicciones, los ms que demoro la prediccion en su totalidad (repetido por fila) y la fecha de finalizacion de la prediccion (repetida por fila).
+- Output: una lista de JSONs con las predicciones, los ms que demoro la prediccion en su totalidad (repetido por fila) y la fecha de finalizacion de la prediccion (repetida por fila).
 
 ## Ejecucion
 Para poder ejecutar el container se debe:
