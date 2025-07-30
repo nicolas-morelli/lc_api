@@ -77,7 +77,7 @@ logger = logging.getLogger(__name__)
 # Podrian generarse de forma dinamica del DF, tomando si es categorica o no, los valores posibles y la cantidad de registros contra el total, pero por simplicidad y procesamiento se decidio usar esta solucion
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Columna: (Tipo de validacion, rango/valores validos, Si es nulleable)
+    # {Columna: (Tipo de validacion, rango/valores validos, Si es nulleable)}
     val_dict = {'CUSTOMER_SENIORITY': ('range', (0, np.inf), False),
                 'SEX': ('categorical', [0, 1], False),
                 'INSR_TYPE': ('categorical', [1201, 1202, 1204], False),
@@ -102,7 +102,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-# Endpoints son identicos, unicamente cambia la cantidad recibida. Se unifica logica en una sola funcion
+# Endpoints son identicos, unicamente cambia la cantidad recibida. Se unifica logica en una sola funcion.
 def pred_routine(df):
     s = time.time()
     df = df.replace(-999, np.nan)
